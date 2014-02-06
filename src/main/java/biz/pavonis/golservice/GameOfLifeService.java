@@ -30,16 +30,19 @@ public interface GameOfLifeService {
     Generation getLatestGeneration();
 
     /**
-     * Adds a pattern to the game of life universe at the
+     * <p>Adds a pattern to the game of life universe at the
      * given coordinates. Throws an {@link PatternDoesNotFitException} if the
-     * pattern does not fit. Overwrites any previous states in life.
+     * pattern does not fit. Overwrites any previous states in life.</p>
      * <em>Note:</em>
      * If the given pattern covers the life universe all state will be
      * overwritten.
      * 
      * @param pattern
+     * @param x
+     * @param y
+     * @param orientation
      */
-    void addPattern(Pattern pattern, int x, int y);
+    void addPattern(Pattern pattern, int x, int y, PatternOrientation orientation);
 
     /**
      * Adds a {@link LifeTickListener} to this {@link GameOfLifeService}.
