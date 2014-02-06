@@ -42,14 +42,15 @@ public interface GameOfLifeService {
      * @param y
      * @param orientation
      */
-    void addPattern(Pattern pattern, int x, int y, PatternOrientation orientation);
+    void stampPattern(Pattern pattern, int x, int y, PatternOrientation orientation);
 
     /**
      * Adds a {@link LifeTickListener} to this {@link GameOfLifeService}.
      * It will be called each time a new {@link Tick} is calculted in life.
      * 
      * @param listener
+     * @return
      */
-    void addTickListener(LifeTickListener listener);
+    boolean addTickListener(LifeTickListener listener);
 
 }
