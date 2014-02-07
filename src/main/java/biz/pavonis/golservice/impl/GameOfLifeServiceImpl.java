@@ -1,9 +1,11 @@
 package biz.pavonis.golservice.impl;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicLong;
 
 import biz.pavonis.golservice.GameOfLifeService;
 import biz.pavonis.golservice.GameOfLifeServiceBuilder;
@@ -19,6 +21,7 @@ public final class GameOfLifeServiceImpl implements GameOfLifeService {
     private final List<LifeTickListener> lifeTickListeners = new CopyOnWriteArrayList<>();
     private final Timer timer = new Timer();
 
+    private AtomicLong generation = new AtomicLong();
     private TimerTask timerTask = createTimerTask();
 
     public GameOfLifeServiceImpl(GameOfLifeServiceBuilder builder) {
@@ -32,7 +35,7 @@ public final class GameOfLifeServiceImpl implements GameOfLifeService {
 
     @Override
     public void start() {
-        stop();
+        pause();
         timer.scheduleAtFixedRate(timerTask, 0, tickInterval);
     }
 
@@ -50,8 +53,7 @@ public final class GameOfLifeServiceImpl implements GameOfLifeService {
 
     @Override
     public Generation getLatestGeneration() {
-        // TODO Auto-generated method stub
-        return null;
+        return new Generation(generation.get(), new Date(System.currentTimeMillis()));
     }
 
     @Override
@@ -70,6 +72,7 @@ public final class GameOfLifeServiceImpl implements GameOfLifeService {
             @Override
             public void run() {
                 boolean[][] newState = universe.recalculateUniverseState();
+                generation.incrementAndGet();
                 fireLifeTickListeners(newState);
             }
         };
@@ -77,7 +80,7 @@ public final class GameOfLifeServiceImpl implements GameOfLifeService {
 
     private void fireLifeTickListeners(boolean[][] newState) {
         for (LifeTickListener listener : lifeTickListeners) {
-            // TODO: generate Tick
+            listener.tick(new TickImpl(getLatestGeneration(), newState));
         }
     }
 

@@ -53,7 +53,23 @@ public class Universe {
                 }
             }
         }
-        return universeState.getAndSet(newState);
+        universeState.getAndSet(newState);
+        return universeState.get();
+    }
+
+    private int countLiveNeighbors(int x, int y) {
+        int result = 0;
+        for (CellNeighbor neighbor : CellNeighbor.values()) {
+            try {
+                boolean isLiving = universeState.get()[y + neighbor.getYOffset()][x + neighbor.getXOffset()];
+                if (isLiving) {
+                    result++;
+                }
+            } catch (IndexOutOfBoundsException e) {
+                // TODO: logging here
+            }
+        }
+        return result;
     }
 
     /**
@@ -96,21 +112,6 @@ public class Universe {
             break;
         }
         return transformedPattern;
-    }
-
-    private int countLiveNeighbors(int x, int y) {
-        int result = 0;
-        for (CellNeighbor neighbor : CellNeighbor.values()) {
-            try {
-                boolean isLiving = universeState.get()[y + neighbor.getYOffset()][x + neighbor.getXOffset()];
-                if (isLiving) {
-                    result++;
-                }
-            } catch (IndexOutOfBoundsException e) {
-                // TODO: logging here
-            }
-        }
-        return result;
     }
 
 }
