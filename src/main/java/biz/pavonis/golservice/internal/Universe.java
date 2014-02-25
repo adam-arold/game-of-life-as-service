@@ -24,13 +24,12 @@ public class Universe {
 	private static final int FLOP_INDEX = 1;
 
 	private final Logger logger = getLogger(getClass());
-	
+
 	private final Queue<StampablePattern> patternQueue = new LinkedBlockingQueue<>();
 	private final boolean[][][] universeDoubleBuffer;
 	private final int height;
 	private final int width;
 	private int flipFlopIndex = FLIP_INDEX;
-	
 
 	public Universe(boolean[][] universeState) {
 		height = universeState.length;
@@ -64,14 +63,11 @@ public class Universe {
 				boolean isLiving = universeDoubleBuffer[flipFlopIndex][y][x];
 				if (isLiving && liveNeighbors < 2) {
 					universeDoubleBuffer[newFlipFlopIndex][y][x] = false;
-				}
-				if (isLiving && (liveNeighbors == 2 || liveNeighbors == 3)) {
+				} else if (isLiving && (liveNeighbors == 2 || liveNeighbors == 3)) {
 					universeDoubleBuffer[newFlipFlopIndex][y][x] = true;
-				}
-				if (isLiving && liveNeighbors > 3) {
+				} else if (isLiving && liveNeighbors > 3) {
 					universeDoubleBuffer[newFlipFlopIndex][y][x] = false;
-				}
-				if (!isLiving && liveNeighbors == 3) {
+				} else if (!isLiving && liveNeighbors == 3) {
 					universeDoubleBuffer[newFlipFlopIndex][y][x] = true;
 				}
 			}
@@ -83,7 +79,7 @@ public class Universe {
 
 	private void stampPatterns() {
 		Iterator<StampablePattern> patternIter = patternQueue.iterator();
-		while(patternIter.hasNext()) {
+		while (patternIter.hasNext()) {
 			StampablePattern pattern = patternIter.next();
 			patternIter.remove();
 			int patternWidth = pattern.getPattern()[0].length;
@@ -112,8 +108,8 @@ public class Universe {
 	}
 
 	/**
-	 * Stamps a pattern to this {@link Universe}. Any existing values will be overwritten.
-	 * Please note that stamping only takes effect at the next {@link Tick}.
+	 * Stamps a pattern to this {@link Universe}. Any existing values will be overwritten. Please note that stamping only takes
+	 * effect at the next {@link Tick}.
 	 * 
 	 * @param pattern
 	 * @param startX
