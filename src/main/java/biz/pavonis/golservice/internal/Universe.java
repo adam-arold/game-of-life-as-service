@@ -1,8 +1,8 @@
-package biz.pavonis.golservice.impl;
+package biz.pavonis.golservice.internal;
 
-import static biz.pavonis.golservice.util.MatrixUtils.rotate180degrees;
-import static biz.pavonis.golservice.util.MatrixUtils.rotateClockWise;
-import static biz.pavonis.golservice.util.MatrixUtils.rotateCounterClockWise;
+import static biz.pavonis.golservice.internal.MatrixUtils.rotate180degrees;
+import static biz.pavonis.golservice.internal.MatrixUtils.rotateClockWise;
+import static biz.pavonis.golservice.internal.MatrixUtils.rotateCounterClockWise;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.Iterator;
@@ -11,9 +11,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import org.slf4j.Logger;
 
-import biz.pavonis.golservice.Pattern;
-import biz.pavonis.golservice.PatternOrientation;
-import biz.pavonis.golservice.Tick;
+import biz.pavonis.golservice.api.Pattern;
+import biz.pavonis.golservice.api.PatternOrientation;
+import biz.pavonis.golservice.api.Tick;
 
 /**
  * Represents a game of life universe.

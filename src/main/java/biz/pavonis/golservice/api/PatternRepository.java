@@ -1,4 +1,4 @@
-package biz.pavonis.golservice;
+package biz.pavonis.golservice.api;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,7 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import biz.pavonis.golservice.exception.InvalidIdException;
+import biz.pavonis.golservice.api.exception.InvalidIdException;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;

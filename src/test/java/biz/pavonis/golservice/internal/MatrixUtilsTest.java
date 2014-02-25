@@ -1,8 +1,10 @@
-package biz.pavonis.golservice.util;
+package biz.pavonis.golservice.internal;
 
 import static org.junit.Assert.assertArrayEquals;
 
 import org.junit.Test;
+
+import biz.pavonis.golservice.internal.MatrixUtils;
 
 public class MatrixUtilsTest {
 

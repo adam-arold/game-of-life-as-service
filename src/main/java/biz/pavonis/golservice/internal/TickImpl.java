@@ -1,7 +1,7 @@
-package biz.pavonis.golservice.impl;
+package biz.pavonis.golservice.internal;
 
-import biz.pavonis.golservice.Generation;
-import biz.pavonis.golservice.Tick;
+import biz.pavonis.golservice.api.Generation;
+import biz.pavonis.golservice.api.Tick;
 
 public class TickImpl implements Tick {
 

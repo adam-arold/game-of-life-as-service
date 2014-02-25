@@ -1,4 +1,4 @@
-package biz.pavonis.golservice.exception;
+package biz.pavonis.golservice.api.exception;
 
 public class PatternDoesNotFitException extends RuntimeException {
 

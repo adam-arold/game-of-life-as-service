@@ -1,9 +1,10 @@
-package biz.pavonis.golservice;
+package biz.pavonis.golservice.api;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import biz.pavonis.golservice.exception.InvalidBuilderDataException;
+import biz.pavonis.golservice.api.GameOfLifeServiceBuilder;
+import biz.pavonis.golservice.api.exception.InvalidBuilderDataException;
 
 public class GameOfLifeServiceBuilderTest {
 

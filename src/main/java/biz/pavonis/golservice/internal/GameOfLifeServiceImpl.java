@@ -1,4 +1,4 @@
-package biz.pavonis.golservice.impl;
+package biz.pavonis.golservice.internal;
 
 import java.sql.Date;
 import java.util.List;
@@ -7,12 +7,12 @@ import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 
-import biz.pavonis.golservice.GameOfLifeService;
-import biz.pavonis.golservice.GameOfLifeServiceBuilder;
-import biz.pavonis.golservice.Generation;
-import biz.pavonis.golservice.LifeTickListener;
-import biz.pavonis.golservice.Pattern;
-import biz.pavonis.golservice.PatternOrientation;
+import biz.pavonis.golservice.api.GameOfLifeService;
+import biz.pavonis.golservice.api.GameOfLifeServiceBuilder;
+import biz.pavonis.golservice.api.Generation;
+import biz.pavonis.golservice.api.LifeTickListener;
+import biz.pavonis.golservice.api.Pattern;
+import biz.pavonis.golservice.api.PatternOrientation;
 
 public final class GameOfLifeServiceImpl implements GameOfLifeService {
 

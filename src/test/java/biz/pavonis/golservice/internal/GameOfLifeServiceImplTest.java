@@ -1,10 +1,10 @@
-package biz.pavonis.golservice.impl;
+package biz.pavonis.golservice.internal;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import biz.pavonis.golservice.GameOfLifeService;
-import biz.pavonis.golservice.GameOfLifeServiceBuilder;
+import biz.pavonis.golservice.api.GameOfLifeService;
+import biz.pavonis.golservice.api.GameOfLifeServiceBuilder;
 
 public class GameOfLifeServiceImplTest {
 

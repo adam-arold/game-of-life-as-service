@@ -1,4 +1,4 @@
-package biz.pavonis.golservice;
+package biz.pavonis.golservice.api;
 
 /**
  * Represents a game of life object pattern.

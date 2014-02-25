@@ -1,4 +1,4 @@
-package biz.pavonis.golservice;
+package biz.pavonis.golservice.api;
 
 public interface Tick {
 

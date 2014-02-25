@@ -1,7 +1,7 @@
-package biz.pavonis.golservice;
+package biz.pavonis.golservice.api;
 
-import biz.pavonis.golservice.exception.InvalidBuilderDataException;
-import biz.pavonis.golservice.impl.GameOfLifeServiceImpl;
+import biz.pavonis.golservice.api.exception.InvalidBuilderDataException;
+import biz.pavonis.golservice.internal.GameOfLifeServiceImpl;
 
 /**
  * This builder can be used to create a {@link GameOfLifeService}.

@@ -1,6 +1,6 @@
-package biz.pavonis.golservice;
+package biz.pavonis.golservice.api;
 
-import biz.pavonis.golservice.exception.PatternDoesNotFitException;
+import biz.pavonis.golservice.api.exception.PatternDoesNotFitException;
 
 /**
  * Represents a game of life session.

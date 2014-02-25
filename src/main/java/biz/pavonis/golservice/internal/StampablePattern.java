@@ -1,4 +1,4 @@
-package biz.pavonis.golservice.impl;
+package biz.pavonis.golservice.internal;
 
 /**
  * Represents a pattern to be stamped.

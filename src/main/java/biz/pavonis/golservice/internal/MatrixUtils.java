@@ -1,4 +1,4 @@
-package biz.pavonis.golservice.util;
+package biz.pavonis.golservice.internal;
 
 /**
  * Utility class for matrix operations.
