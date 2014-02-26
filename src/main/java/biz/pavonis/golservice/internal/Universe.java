@@ -3,13 +3,10 @@ package biz.pavonis.golservice.internal;
 import static biz.pavonis.golservice.internal.MatrixUtils.rotate180degrees;
 import static biz.pavonis.golservice.internal.MatrixUtils.rotateClockWise;
 import static biz.pavonis.golservice.internal.MatrixUtils.rotateCounterClockWise;
-import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import org.slf4j.Logger;
 
 import biz.pavonis.golservice.api.Pattern;
 import biz.pavonis.golservice.api.PatternOrientation;
@@ -20,24 +17,28 @@ import biz.pavonis.golservice.api.Tick;
  */
 public class Universe {
 
+	private static final int BORDER_OFFSET = 1;
+	private static final int BORDER_SIZE = 1;
+	private static final int BORDER_COUNT = 2;
 	private static final int FLIP_INDEX = 0;
 	private static final int FLOP_INDEX = 1;
-
-	private final Logger logger = getLogger(getClass());
-
 	private final Queue<StampablePattern> patternQueue = new LinkedBlockingQueue<>();
 	private final boolean[][][] universeDoubleBuffer;
 	private final int height;
 	private final int width;
+	private final boolean[] lookupTable = new boolean[512];
+	{
+		generateLookupTable();
+	}
 	private int flipFlopIndex = FLIP_INDEX;
 
 	public Universe(boolean[][] universeState) {
 		height = universeState.length;
 		width = universeState[0].length;
-		universeDoubleBuffer = new boolean[2][height][width];
+		universeDoubleBuffer = new boolean[2][height + BORDER_COUNT * BORDER_SIZE][width + BORDER_COUNT * BORDER_SIZE];
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				universeDoubleBuffer[FLIP_INDEX][y][x] = universeState[y][x];
+				universeDoubleBuffer[flipFlopIndex][BORDER_OFFSET + y][BORDER_OFFSET + x] = universeState[y][x];
 			}
 		}
 	}
@@ -46,8 +47,8 @@ public class Universe {
 	 * Resets the universe state to an empty one.
 	 */
 	public void resetUniverseState() {
-		universeDoubleBuffer[FLIP_INDEX] = new boolean[height][width];
-		universeDoubleBuffer[FLOP_INDEX] = new boolean[height][width];
+		universeDoubleBuffer[FLIP_INDEX] = new boolean[height + BORDER_COUNT * BORDER_SIZE][width + BORDER_COUNT * BORDER_SIZE];
+		universeDoubleBuffer[FLOP_INDEX] = new boolean[height + BORDER_COUNT * BORDER_SIZE][width + BORDER_COUNT * BORDER_SIZE];
 	}
 
 	/**
@@ -56,24 +57,21 @@ public class Universe {
 	 * @return
 	 */
 	public boolean[][] recalculateUniverseState() {
-		int newFlipFlopIndex = flipFlopIndex == FLIP_INDEX ? FLOP_INDEX : FLIP_INDEX;
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				int liveNeighbors = countLiveNeighbors(x, y);
-				boolean isLiving = universeDoubleBuffer[flipFlopIndex][y][x];
-				if (isLiving && liveNeighbors < 2) {
-					universeDoubleBuffer[newFlipFlopIndex][y][x] = false;
-				} else if (isLiving && (liveNeighbors == 2 || liveNeighbors == 3)) {
-					universeDoubleBuffer[newFlipFlopIndex][y][x] = true;
-				} else if (isLiving && liveNeighbors > 3) {
-					universeDoubleBuffer[newFlipFlopIndex][y][x] = false;
-				} else if (!isLiving && liveNeighbors == 3) {
-					universeDoubleBuffer[newFlipFlopIndex][y][x] = true;
-				}
+		int newFlipFlopIndex = (flipFlopIndex == FLIP_INDEX ? FLOP_INDEX : FLIP_INDEX);
+		boolean[][] newBuffer = universeDoubleBuffer[newFlipFlopIndex];
+		boolean[][] oldBuffer = universeDoubleBuffer[flipFlopIndex];
+		for (int y = BORDER_OFFSET; y <= height; y++) {
+			int environment = (oldBuffer[y - 1][0] ? 32 : 0) + (oldBuffer[y - 1][1] ? 4 : 0) + (oldBuffer[y][0] ? 16 : 0)
+							+ (oldBuffer[y][1] ? 2 : 0) + (oldBuffer[y + 1][0] ? 8 : 0) + (oldBuffer[y + 1][1] ? 1 : 0);
+			for (int x = BORDER_OFFSET; x <= width; x++) {
+				environment = ((environment % 64) * 8) + (oldBuffer[y - 1][x + 1] ? 4 : 0) + (oldBuffer[y][x + 1] ? 2 : 0)
+								+ (oldBuffer[y + 1][x + 1] ? 1 : 0);
+				newBuffer[y][x] = lookupTable[environment];
 			}
 		}
 		stampPatterns();
-		flipFlopIndex = newFlipFlopIndex; // assignment is atomic, no synchronization needed
+		universeDoubleBuffer[newFlipFlopIndex] = newBuffer;
+		flipFlopIndex = newFlipFlopIndex;
 		return universeDoubleBuffer[flipFlopIndex];
 	}
 
@@ -90,21 +88,6 @@ public class Universe {
 				}
 			}
 		}
-	}
-
-	private int countLiveNeighbors(int x, int y) {
-		int result = 0;
-		for (CellNeighbor neighbor : CellNeighbor.values()) {
-			try {
-				boolean isLiving = universeDoubleBuffer[flipFlopIndex][y + neighbor.getYOffset()][x + neighbor.getXOffset()];
-				if (isLiving) {
-					result++;
-				}
-			} catch (IndexOutOfBoundsException e) {
-				logger.info("Cell's neighbor was off the grid.", e);
-			}
-		}
-		return result;
 	}
 
 	/**
@@ -138,6 +121,26 @@ public class Universe {
 			break;
 		}
 		return transformedPattern;
+	}
+
+	private void generateLookupTable() {
+		for (int i = 0; i < 512; i++) {
+			boolean[] bits = BitUtils.toBinaryArray(i, 9);
+			int liveNeighbors = 0;
+			for (int j = 0; j < 9; j++) {
+				if (bits[j] && j != 4) {
+					liveNeighbors++;
+				}
+			}
+			boolean isLiving = bits[4];
+			if (!isLiving && liveNeighbors == 3) {
+				lookupTable[i] = true;
+			} else if (isLiving && (liveNeighbors == 2 || liveNeighbors == 3)) {
+				lookupTable[i] = true;
+			} else {
+				lookupTable[i] = false;
+			}
+		}
 	}
 
 }
