@@ -1,5 +1,6 @@
 package biz.pavonis.golservice.internal;
 
+import static biz.pavonis.golservice.internal.BitUtils.toBinaryArray;
 import static biz.pavonis.golservice.internal.MatrixUtils.rotate180degrees;
 import static biz.pavonis.golservice.internal.MatrixUtils.rotateClockWise;
 import static biz.pavonis.golservice.internal.MatrixUtils.rotateCounterClockWise;
@@ -57,6 +58,7 @@ public class Universe {
 	 * @return
 	 */
 	public boolean[][] recalculateUniverseState() {
+		stampPatterns();
 		int newFlipFlopIndex = (flipFlopIndex == FLIP_INDEX ? FLOP_INDEX : FLIP_INDEX);
 		boolean[][] newBuffer = universeDoubleBuffer[newFlipFlopIndex];
 		boolean[][] oldBuffer = universeDoubleBuffer[flipFlopIndex];
@@ -69,7 +71,6 @@ public class Universe {
 				newBuffer[y][x] = lookupTable[environment];
 			}
 		}
-		stampPatterns();
 		universeDoubleBuffer[newFlipFlopIndex] = newBuffer;
 		flipFlopIndex = newFlipFlopIndex;
 		return universeDoubleBuffer[flipFlopIndex];
@@ -125,7 +126,7 @@ public class Universe {
 
 	private void generateLookupTable() {
 		for (int i = 0; i < 512; i++) {
-			boolean[] bits = BitUtils.toBinaryArray(i, 9);
+			boolean[] bits = toBinaryArray(i, 9);
 			int liveNeighbors = 0;
 			for (int j = 0; j < 9; j++) {
 				if (bits[j] && j != 4) {

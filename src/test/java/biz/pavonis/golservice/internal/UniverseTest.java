@@ -26,6 +26,20 @@ public class UniverseTest {
 					{ false, false, true, true, true, false },
 					{ false, false, false, false, false, false },
 					{ false, false, false, false, false, false }};
+	private static final boolean[][] GLIDER_UNIVERSE_3 = new boolean[][] {
+		{ false, false, false, false, false, false },
+		{ false, false, false, false, false, false },
+		{ false, false, true, false, true, false },
+		{ false, false, false, true, true, false },
+		{ false, false, false, true, false, false },
+		{ false, false, false, false, false, false }};
+	private static final boolean[][] GLIDER_UNIVERSE_4 = new boolean[][] {
+		{ false, false, false, false, false, false },
+		{ false, false, false, false, false, false },
+		{ false, false, false, false, true, false },
+		{ false, false, true, false, true, false },
+		{ false, false, false, true, true, false },
+		{ false, false, false, false, false, false }};
 
 	private Universe target;
 
@@ -44,6 +58,8 @@ public class UniverseTest {
 	public void testRecalculateUniverseState() {
 		assertArrayEquals(GLIDER_UNIVERSE_1, target.recalculateUniverseState());
 		assertArrayEquals(GLIDER_UNIVERSE_2, target.recalculateUniverseState());
+		assertArrayEquals(GLIDER_UNIVERSE_3, target.recalculateUniverseState());
+		assertArrayEquals(GLIDER_UNIVERSE_4, target.recalculateUniverseState());
 	}
 
 }

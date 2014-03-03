@@ -43,4 +43,16 @@ public final class MatrixUtils {
         }
         return ret;
     }
+    
+    public static boolean[][] copyMatrix(boolean[][] matrix) {
+    	int maxY = matrix.length;
+    	int maxX = matrix[0].length;
+    	boolean[][] copy = new boolean[maxY][maxX];
+    	for(int y = 0; y < maxY; y++) {
+    		for(int x = 0; x < maxX; x++) {
+    			copy[y][x] = matrix[y][x];
+    		}
+    	}
+    	return copy;
+    }
 }

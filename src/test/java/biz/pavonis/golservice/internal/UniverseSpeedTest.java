@@ -9,7 +9,7 @@ import org.junit.Test;
 
 public class UniverseSpeedTest {
 
-	private static final int UNIVERSE_SIZE = 5000;
+	private static final int UNIVERSE_SIZE = 1000;
 	private static final int LOOPS = 100;
 	private Universe target;
 
